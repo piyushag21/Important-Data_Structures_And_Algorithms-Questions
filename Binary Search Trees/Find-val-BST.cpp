@@ -35,53 +35,28 @@ Node *insert(Node *root , int data)
     return root;
 }
 
-Node* inorder_successer(Node *root)
-{
-    Node *temp = root;
-    while(temp->left != NULL)
-    {
-        temp = temp->left;
-    }
-    return temp;
-}
-
-Node* delete_node(Node *root , int data)
+Node* search_node(Node *root , int value)
 {
     if(root == NULL)
     {
-        return root;
+        cout << "Value Not Found";
     }
-
-    if ( data < root->key)
+    else if(root->key == value)
     {
-        root->left = delete_node(root->left , data);
+        cout << "Value Found" << "\n";
     }
-    else if( data > root->key )
-    {
-        root->right = delete_node(root->right , data);
-    }
-
     else
     {
-        if(root->left == NULL)
+        if(value < root->key)
         {
-            Node *temp = root->right;
-            free(root);
-            return temp;
+            root->left = search_node(root->left, value);
         }
-        else if(root->right == NULL)
+        else
         {
-            Node *temp = root->left;
-            free(root);
-            return temp;
+            root->right = search_node(root->right, value);
         }
-
-        Node *temp = inorder_successer(root->right);
-        root->key = temp->key;
-        root->right = delete_node(root->right , temp->key);
     }
     return root;
-    
 }
 
 void in_order(Node *root)
@@ -103,11 +78,8 @@ int main()
     {
         insert( root , arr[i] );
     }
-    cout <<  "Inorder Transversal befor deletion ";
-    in_order(root);
-
-    Node *temp1 = NULL;
-    delete_node(root, 13);
-    cout << "\n" << "Inorder Transversal After deletion ";
-    in_order(root);
+    int value;
+    cout << "Enter Value You Want To Search ";
+    cin >> value;
+    search_node(root, value);
 }
